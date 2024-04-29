@@ -2,13 +2,28 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:local="clr-namespace:DRNews"
+                          xmlns:news="clr-namespace:DRNews.Components.Pages"
              x:Class="DRNews.MainPage"
              BackgroundColor="{DynamicResource PageBackgroundColor}">
+    <ScrollView>
+        <StackLayout>
 
-    <BlazorWebView x:Name="blazorWebView" HostPage="wwwroot/index.html">
-        <BlazorWebView.RootComponents>
-            <RootComponent Selector="#app" ComponentType="{x:Type local:Components.Pages.NewsPage}" />
-        </BlazorWebView.RootComponents>
-    </BlazorWebView>
+            <StackLayout Orientation="Horizontal" BackgroundColor="#2196F3" Padding="10, 20, 10, 10">
+                <Label Text="Home" TextColor="White" HorizontalOptions="StartAndExpand" VerticalOptions="Center" FontSize="Large"/>
+                <Label Text="Settings" TextColor="White" HorizontalOptions="EndAndExpand" VerticalOptions="Center" FontSize="Medium"/>
+            </StackLayout>
 
+            <StackLayout Orientation="Horizontal" BackgroundColor="#1976D2" Padding="10, 10, 10, 10">
+                <Label Text="Seneste Nyt" TextColor="White" HorizontalOptions="StartAndExpand" VerticalOptions="Center"/>
+                <Label Text="Indland" TextColor="White" HorizontalOptions="CenterAndExpand" VerticalOptions="Center"/>
+                <Label Text="Udland" TextColor="White" HorizontalOptions="EndAndExpand" VerticalOptions="Center"/>
+            </StackLayout>
+
+            <BlazorWebView x:Name="blazorWebView" HostPage="wwwroot/index.html">
+                <BlazorWebView.RootComponents>
+                    <RootComponent Selector="#app" ComponentType="{x:Type news:NewsPage}" />
+                </BlazorWebView.RootComponents>
+            </BlazorWebView>
+        </StackLayout>
+    </ScrollView>
 </ContentPage>

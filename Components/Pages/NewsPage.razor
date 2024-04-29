@@ -1,32 +1,27 @@
 ﻿@using System.Collections.Generic;
 @using System.Reflection.Metadata;
 @using System.Xml.Linq;
+@using System.Windows.Input
 @page "/news"
-
-<h3>News Page</h3>
-
 @if (newsItems == null)
 {
     <p>Loading...</p>
 }
 else
 {
-    <table class="table">
-        <tbody>
-            @foreach (var item in newsItems)
-            {
-                <tr>
-                    <td>@item.Title</td>
-                    <td>@item.Date</td>
-                    <td>@item.Link</td>
-                </tr>
-            }
-        </tbody>
-    </table>
+        @foreach (var item in newsItems)
+        {
+            @*     <img src="@item.ImageUrl" alt="News Image" class="news-image" /> *@
+                    <h4>@item.Title</h4>
+                    <p class="news-date">@item.Date</p>
+                    <p>@item.Description</p>
+        }
 }
 
 @code {
     private List<NewsItem> newsItems;
+    public ICommand RefreshCommand { get; }
+
 
     protected override async Task OnInitializedAsync()
     {
