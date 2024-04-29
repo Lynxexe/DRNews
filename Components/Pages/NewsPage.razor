@@ -1,0 +1,115 @@
+﻿@using System.Collections.Generic;
+@using System.Reflection.Metadata;
+@using System.Xml.Linq;
+@page "/news"
+
+<h3>News Page</h3>
+
+@if (newsItems == null)
+{
+    <p>Loading...</p>
+}
+else
+{
+    <table class="table">
+        <tbody>
+            @foreach (var item in newsItems)
+            {
+                <tr>
+                    <td>@item.Title</td>
+                    <td>@item.Date</td>
+                    <td>@item.Link</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private List<NewsItem> newsItems;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadNewsAsync();
+    }
+
+    private async Task LoadNewsAsync()
+    {
+        var httpClient = new HttpClient();
+        var feedUrls = new List<string>
+        {
+            "https://www.dr.dk/nyheder/service/feeds/senestenyt",
+            "https://www.dr.dk/nyheder/service/feeds/indland",
+            "https://www.dr.dk/nyheder/service/feeds/udland",
+            // Add other feed URLs here...
+        };
+
+        var tasks = feedUrls.Select(url => httpClient.GetStringAsync(url));
+        var results = await Task.WhenAll(tasks);
+
+        var items = new List<NewsItem>();
+
+        foreach (var result in results)
+        {
+            var document = XDocument.Parse(result);
+            Console.WriteLine(result);
+            var news = document.Descendants("item")
+                               .Select(item => new NewsItem
+                               {
+                                   Title = (string)item.Element("title"),
+                                   Link = (string)item.Element("link"),
+                                   Date = (string)item.Element("pubDate"),
+                                   Description = (string)item.Element("description")
+                               });
+            items.AddRange(news);
+        }
+
+
+        newsItems = items.Select(item =>
+    {
+        // Parse the date string into a DateTime object
+        DateTime newsDate = DateTime.Parse(item.Date);
+        // Calculate the time difference
+        TimeSpan difference = DateTime.UtcNow - newsDate;
+        string formattedDate;
+        if (difference.TotalSeconds >= 0)
+        {
+            if (difference.TotalDays >= 1)
+            {
+                // If the difference is more than or equal to 1 day, display it in days
+                formattedDate = $"{(int)difference.TotalDays} days ago";
+            }
+            else if (difference.TotalHours >= 1)
+            {
+                // If the difference is less than 1 day but more than or equal to 1 hour, display it in hours
+                formattedDate = $"{(int)difference.TotalHours} hours ago";
+            }
+            else if (difference.TotalMinutes >= 1)
+            {
+                // If the difference is less than 1 hour but more than or equal to 1 minute, display it in minutes
+                formattedDate = $"{(int)difference.TotalMinutes} minutes ago";
+            }
+            else
+            {
+                // Otherwise, display it in seconds
+                formattedDate = $"{(int)difference.TotalSeconds} seconds ago";
+            }
+        }
+        else
+        {
+            formattedDate = "just now";
+        }
+        // Update the Date property with the formatted date
+        item.Date = formattedDate;
+        return item;
+    }).ToList();
+    }
+
+    public class NewsItem
+    {
+        public string Title { get; set; }
+        public string Link { get; set; }
+        public string Date { get; set; }
+        public string Description { get; set; }
+    }
+}
