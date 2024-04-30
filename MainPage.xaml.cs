@@ -1,4 +1,6 @@
-﻿namespace DRNews
+﻿using DRNews.Service;
+
+namespace DRNews
 {
     public partial class MainPage : ContentPage
     {
@@ -6,9 +8,12 @@
         private Frame lastSelectedFrame;
         private Color mainColor = Color.FromHex("#1976D2"); // Main color
         private Color selectedColor = Color.FromHex("#FFA500");
-        public MainPage()
+        private static INewsService NewsService;
+        public MainPage(INewsService newsService)
         {
+
             InitializeComponent();
+            NewsService = newsService;
             lastSelectedFrame = SenesteNytFrame;
             SenesteNytFrame.BackgroundColor = selectedColor;
         }
