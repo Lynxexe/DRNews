@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using DRNews.Service;
+using Microsoft.Extensions.Logging;
 
 namespace DRNews
 {
@@ -21,7 +22,7 @@ namespace DRNews
     		builder.Services.AddBlazorWebViewDeveloperTools();
     		builder.Logging.AddDebug();
 #endif
-
+            builder.Services.AddSingleton<INewsService, NewsService>();
             return builder.Build();
         }
     }
