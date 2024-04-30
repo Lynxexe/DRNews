@@ -1,8 +1,4 @@
-﻿using DRNews.Components.Pages;
-using Microsoft.Maui.Controls;
-using Microsoft.AspNetCore.Components.WebView.Maui;
-
-namespace DRNews
+﻿namespace DRNews
 {
     public partial class MainPage : ContentPage
     {
@@ -13,31 +9,7 @@ namespace DRNews
         public MainPage()
         {
             InitializeComponent();
-            lastSelectedFrame = SenesteNytFrame;
-            SenesteNytFrame.BackgroundColor = selectedColor;
-        }
-        private void SenesteNytLabel_Tapped(object sender, EventArgs e)
-        {
-            
-            UpdateButtonAppearance(SenesteNytFrame);
-        }
 
-        private void IndlandLabel_Tapped(object sender, EventArgs e)
-        {
-            UpdateButtonAppearance(IndlandFrame);
-        }
-
-        private void UdlandLabel_Tapped(object sender, EventArgs e)
-        {
-            UpdateButtonAppearance(UdlandFrame);
-        }
-
-        private void UpdateButtonAppearance(Frame currentFrame)
-        {
-            lastSelectedFrame.BackgroundColor = mainColor;
-
-            currentFrame.BackgroundColor = selectedColor;
-            lastSelectedFrame = currentFrame;
         }
     }
 }
