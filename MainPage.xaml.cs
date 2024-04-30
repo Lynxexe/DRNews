@@ -17,20 +17,10 @@ namespace DRNews
             lastSelectedFrame = SenesteNytFrame;
             SenesteNytFrame.BackgroundColor = selectedColor;
         }
-        private void SenesteNytLabel_Tapped(object sender, EventArgs e)
+        private void Frame_Tapped(object sender, EventArgs e)
         {
-
-            UpdateButtonAppearance(SenesteNytFrame);
-        }
-
-        private void IndlandLabel_Tapped(object sender, EventArgs e)
-        {
-            UpdateButtonAppearance(IndlandFrame);
-        }
-
-        private void UdlandLabel_Tapped(object sender, EventArgs e)
-        {
-            UpdateButtonAppearance(UdlandFrame);
+            var tappedFrame = sender as Frame;
+            UpdateButtonAppearance(tappedFrame);
         }
 
         private void UpdateButtonAppearance(Frame currentFrame)
@@ -40,5 +30,12 @@ namespace DRNews
             currentFrame.BackgroundColor = selectedColor;
             lastSelectedFrame = currentFrame;
         }
+
+        private async void FilterButton_Clicked(object sender, EventArgs e)
+        {
+            filterOptions.IsVisible = !filterOptions.IsVisible;
+            filterSearchBar.Text = ""; // Clear text when showing filter options
+        }
+
     }
 }
