@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace DRNews.Service
 {
-    internal interface INewsService
+    public interface INewsService
     {
         Task<List<NewsItem>> GetNewsAsync();
     }
