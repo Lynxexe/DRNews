@@ -10,32 +10,30 @@
 
             <StackLayout Orientation="Horizontal" BackgroundColor="#2196F3" Padding="10, 20, 10, 10">
                 <Label Text="Home" TextColor="White" HorizontalOptions="StartAndExpand" VerticalOptions="Center" FontSize="Large"/>
-                <Button x:Name="filterButton" Text="Filter" Clicked="FilterButton_Clicked" VerticalOptions="Center"/>
+                <!--<Button x:Name="filterButton" Text="Filter" Clicked="FilterButton_Clicked" VerticalOptions="Center"/>-->
             </StackLayout>
-            <StackLayout x:Name="filterOptions" Orientation="Vertical" IsVisible="False">
+            <!--<StackLayout x:Name="filterOptions" Orientation="Vertical" IsVisible="False">
                 <SearchBar x:Name="filterSearchBar" Placeholder="Enter filter criteria..." VerticalOptions="CenterAndExpand" Background="White"/>
-            </StackLayout>
+            </StackLayout>-->
 
-            <StackLayout Orientation="Horizontal" BackgroundColor="#1976D2" Padding="5" Spacing="5" HorizontalOptions="FillAndExpand">
-                <Frame x:Name="SenesteNytFrame" BackgroundColor="Transparent" HorizontalOptions="Center" VerticalOptions="Center" CornerRadius="5" Margin="0,0,5,0" Padding="7">
+            <StackLayout Orientation="Horizontal" BackgroundColor="#1976D2" Padding="10, 10, 10, 10">
+                <Frame x:Name="SenesteNytFrame" BackgroundColor="Transparent" HorizontalOptions="StartAndExpand" VerticalOptions="Center" Padding="10" CornerRadius="5">
                     <Frame.GestureRecognizers>
-                        <TapGestureRecognizer Tapped="Frame_Tapped"/>
+                        <TapGestureRecognizer Tapped="SenesteNytLabel_Tapped"/>
                     </Frame.GestureRecognizers>
                     <Label Text="Seneste Nyt" TextColor="White" FontSize="Medium" HorizontalOptions="Center" VerticalOptions="Center" />
                 </Frame>
-
-                <Frame x:Name="IndlandFrame" BackgroundColor="Transparent" HorizontalOptions="Fill" VerticalOptions="Center" CornerRadius="5" Margin="0,0,5,0" Padding="7">
+                <Frame x:Name="IndlandFrame" BackgroundColor="Transparent" HorizontalOptions="CenterAndExpand" VerticalOptions="Center" Padding="10" CornerRadius="5">
                     <Frame.GestureRecognizers>
-                        <TapGestureRecognizer Tapped="Frame_Tapped"/>
+                        <TapGestureRecognizer Tapped="IndlandLabel_Tapped"/>
                     </Frame.GestureRecognizers>
-                    <Label Text="Indland" TextColor="White" FontSize="Medium" HorizontalOptions="Fill" VerticalOptions="Center" />
+                    <Label Text="Indland" TextColor="White" FontSize="Medium" HorizontalOptions="Center" VerticalOptions="Center" />
                 </Frame>
-
-                <Frame x:Name="UdlandFrame" BackgroundColor="Transparent" HorizontalOptions="Fill" VerticalOptions="Center"  CornerRadius="5" Margin="0,0,0,0" Padding="7">
+                <Frame x:Name="UdlandFrame" BackgroundColor="Transparent" HorizontalOptions="EndAndExpand" VerticalOptions="Center" Padding="10" CornerRadius="5">
                     <Frame.GestureRecognizers>
-                        <TapGestureRecognizer Tapped="Frame_Tapped"/>
+                        <TapGestureRecognizer Tapped="UdlandLabel_Tapped"/>
                     </Frame.GestureRecognizers>
-                    <Label Text="Udland" TextColor="White" FontSize="Medium" HorizontalOptions="Fill" VerticalOptions="Center" />
+                    <Label Text="Udland" TextColor="White" FontSize="Medium" HorizontalOptions="Center" VerticalOptions="Center" />
                 </Frame>
             </StackLayout>
 

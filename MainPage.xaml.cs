@@ -48,11 +48,11 @@ namespace DRNews
             }
             UpdateButtonAppearance(UdlandFrame);
         }
-        private void Frame_Tapped(object sender, EventArgs e)
-        {
-            var tappedFrame = sender as Frame;
-            UpdateButtonAppearance(tappedFrame);
-        }
+        //private void Frame_Tapped(object sender, EventArgs e)
+        //{
+        //    var tappedFrame = sender as Frame;
+        //    UpdateButtonAppearance(tappedFrame);
+        //}
         private void UpdateButtonAppearance(Frame currentFrame)
         {
             lastSelectedFrame.BackgroundColor = mainColor;
