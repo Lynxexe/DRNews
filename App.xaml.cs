@@ -1,4 +1,5 @@
 ﻿using DRNews.Service;
+using Microsoft.AspNetCore.Components;
 
 namespace DRNews
 {
@@ -7,7 +8,6 @@ namespace DRNews
         public App(INewsService newsService)
         {
             InitializeComponent();
-
             MainPage = new MainPage(newsService);
 
         }

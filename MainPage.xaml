@@ -36,7 +36,7 @@
 
             <BlazorWebView x:Name="blazorWebView" HostPage="wwwroot/index.html">
                 <BlazorWebView.RootComponents>
-                    <RootComponent Selector="#app" ComponentType="{x:Type news:NewsPage}" />
+                    <RootComponent x:Name ="rootComponent" Selector="#app" ComponentType="{x:Type news:NewsPage}" />
                 </BlazorWebView.RootComponents>
             </BlazorWebView>
         </StackLayout>

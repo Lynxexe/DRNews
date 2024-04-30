@@ -1,4 +1,6 @@
-﻿using DRNews.Service;
+﻿using DRNews.Components.Pages;
+using DRNews.Service;
+using Microsoft.AspNetCore.Components;
 
 namespace DRNews
 {
@@ -19,17 +21,31 @@ namespace DRNews
         }
         private void SenesteNytLabel_Tapped(object sender, EventArgs e)
         {
+            if (selectedCategory != "SenesteNyt")
+            {
+                selectedCategory = "SenesteNyt";
+
+            }
 
             UpdateButtonAppearance(SenesteNytFrame);
         }
 
         private void IndlandLabel_Tapped(object sender, EventArgs e)
         {
+            if (selectedCategory != "Indland")
+            {
+                selectedCategory = "Indland";
+            }
             UpdateButtonAppearance(IndlandFrame);
+
         }
 
         private void UdlandLabel_Tapped(object sender, EventArgs e)
         {
+            if (selectedCategory != "Udland")
+            {
+                selectedCategory = "Udland";
+            }
             UpdateButtonAppearance(UdlandFrame);
         }
 

@@ -4,7 +4,7 @@
 @using System.Windows.Input
 @using DRNews.Model
 @using DRNews.Service
-@page "/news"
+@page "/news/{selectedCategory}"
 @inject INewsService newsService
 
 <style>
@@ -50,6 +50,11 @@
 }
 else
 {
+    <div>
+        <button @onclick='() => FilterNewsItems("SenesteNyt")'>Seneste Nyt</button>
+        <button @onclick='() => FilterNewsItems("Indland")'>Indland</button>
+        <button @onclick='() => FilterNewsItems("Udland")'>Udland</button>
+    </div>
         @foreach (var item in newsItems)
         {
         <div class="news-container">
@@ -76,14 +81,26 @@ else
 @code {
     private List<NewsItem> newsItems;
 
+
+    [Parameter]
+    public string selectedCategory { get; set; } = "SenesteNyt";
+    [Inject]
+    private NavigationManager NavigationManager { get; set; }
     protected override async Task OnInitializedAsync()
     {
-        await LoadNewsAsync();
+        await base.OnInitializedAsync();
+
+        newsItems = await newsService.GetNewsAsync(selectedCategory);
+    }
+    private async Task LoadNewsItems()
+    {
+        newsItems = await newsService.GetNewsAsync(selectedCategory);
     }
 
-    private async Task LoadNewsAsync()
+    private async Task FilterNewsItems(string category)
     {
-        // Call the GetNewsAsync method of the injected NewsService
-        newsItems = await newsService.GetNewsAsync();
+        selectedCategory = category;
+        Console.WriteLine(selectedCategory);
+        await LoadNewsItems();
     }
 }
