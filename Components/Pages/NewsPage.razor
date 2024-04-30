@@ -16,8 +16,8 @@
         top: 50%; /* Move the image container to the vertical center */
         left: 20px; /* Adjust the left offset as needed */
         transform: translateY(-50%); /* Center the image container vertically */
-        width: 80px; /* Set a fixed width for the image container */
-        height: 80px; /* Set a fixed height for the image container */
+        width: 100px; /* Increase the width to make the circle bigger */
+        height: 100px; /* Increase the height to make the circle bigger */
     }
 
     .news-image {
@@ -28,7 +28,7 @@
     }
 
     .content-container {
-        margin-left: 120px; /* Adjust the left margin to create space for the image */
+        margin-left: 140px; /* Adjust the left margin to create space for the larger image */
     }
 
     .content {
@@ -38,6 +38,7 @@
         transform: translateY(-50%); /* Center the content container vertically */
     }
 </style>
+
 
 @if (newsItems == null)
 {
@@ -52,6 +53,12 @@ else
             {
                 <div class="image-container">
                     <img src="@item.Image" alt="News Image" class="news-image" />
+                </div>
+            }
+            else
+            {
+                <div class="image-container">
+                    <img src="images/newsimage.jpg" alt="News Image" class="news-image" />
                 </div>
             }
             <div class="content-container">
