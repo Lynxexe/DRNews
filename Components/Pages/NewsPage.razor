@@ -3,6 +3,42 @@
 @using System.Xml.Linq;
 @using System.Windows.Input
 @page "/news"
+<style>
+    .news-container {
+        display: flex;
+        align-items: center;
+        position: relative; /* Set position relative for the parent container */
+        padding: 10px;
+    }
+
+    .image-container {
+        position: absolute; /* Position the image container absolutely */
+        top: 50%; /* Move the image container to the vertical center */
+        left: 20px; /* Adjust the left offset as needed */
+        transform: translateY(-50%); /* Center the image container vertically */
+        width: 80px; /* Set a fixed width for the image container */
+        height: 80px; /* Set a fixed height for the image container */
+    }
+
+    .news-image {
+        width: 100%; /* Set the width of the image to fill the container */
+        height: 100%; /* Set the height of the image to fill the container */
+        object-fit: cover; /* Ensure images maintain aspect ratio and cover the space */
+        border-radius: 50%; /* Create a circular shape */
+    }
+
+    .content-container {
+        margin-left: 120px; /* Adjust the left margin to create space for the image */
+    }
+
+    .content {
+        position: absolute; /* Position the content container absolutely */
+        top: 50%; /* Move the content container to the vertical center */
+        left: 0; /* Align the content container to the left */
+        transform: translateY(-50%); /* Center the content container vertically */
+    }
+</style>
+
 @if (newsItems == null)
 {
     <p>Loading...</p>
@@ -11,10 +47,18 @@ else
 {
         @foreach (var item in newsItems)
         {
-            @*     <img src="@item.ImageUrl" alt="News Image" class="news-image" /> *@
-                    <h4>@item.Title</h4>
-                    <p class="news-date">@item.Date</p>
-                    <p>@item.Description</p>
+        <div class="news-container">
+            @if (!string.IsNullOrEmpty(item.Image))
+            {
+                <div class="image-container">
+                    <img src="@item.Image" alt="News Image" class="news-image" />
+                </div>
+            }
+            <div class="content-container">
+                <h4>@item.Title</h4>
+                <p class="news-date">@item.Date</p>
+            </div>
+        </div>
         }
 }
 
@@ -43,7 +87,7 @@ else
         var results = await Task.WhenAll(tasks);
 
         var items = new List<NewsItem>();
-
+        XNamespace mediaNameSpace = "http://search.yahoo.com/mrss/";
         foreach (var result in results)
         {
             var document = XDocument.Parse(result);
@@ -54,6 +98,7 @@ else
                                    Title = (string)item.Element("title"),
                                    Link = (string)item.Element("link"),
                                    Date = (string)item.Element("pubDate"),
+                                       Image = (string)item.Descendants(mediaNameSpace + "content").FirstOrDefault()?.Attribute("url")?.Value
                                });
             items.AddRange(news);
         }
@@ -104,6 +149,6 @@ else
         public string Title { get; set; }
         public string Link { get; set; }
         public string Date { get; set; }
-        public string Description { get; set; }
+        public string Image { get; set; }
     }
 }
