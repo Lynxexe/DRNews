@@ -66,7 +66,9 @@ namespace DRNews
         }
         private void FilterSearchBar_TextChanged(object sender, TextChangedEventArgs e)
         {
+            // Update the message filter with the new text
             message.Filter = e.NewTextValue;
+            // Send the updated message
             SendMessage(message);
         }
         private void UpdateButtonAppearance(Frame currentFrame)

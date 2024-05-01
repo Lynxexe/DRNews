@@ -72,6 +72,7 @@ else
             }
             <div class="content-container">
                 <h4>@item.Title</h4>
+
                 <p class="news-date">@item.Date</p>
             </div>
         </div>
@@ -156,7 +157,20 @@ else
                 newsItems.Add(news);
             }
         }
+        if (!string.IsNullOrEmpty(Filter))
+        {
 
+            string[] filters = Filter.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries)
+                             .Select(f => f.Trim())
+                             .ToArray();
+            foreach (var filterString in filters)
+            {
+                if (!string.IsNullOrEmpty(filterString))
+                {
+                    newsItems = newsItems.Where(x => !x.Title.Contains(filterString, StringComparison.OrdinalIgnoreCase)).ToList();
+                }
+            }
+        }
         // Sort the news items by date
         newsItems = newsItems.OrderByDescending(item => DateTime.Parse(item.DateObject)).ToList();
 
