@@ -10,11 +10,11 @@
 
             <StackLayout Orientation="Horizontal" BackgroundColor="#2196F3" Padding="10, 20, 10, 10">
                 <Label Text="Home" TextColor="White" HorizontalOptions="StartAndExpand" VerticalOptions="Center" FontSize="Large"/>
-                <!--<Button x:Name="filterButton" Text="Filter" Clicked="FilterButton_Clicked" VerticalOptions="Center"/>-->
+                <Button x:Name="filterButton" Text="Filter" Clicked="FilterButton_Clicked" VerticalOptions="Center"/>
             </StackLayout>
-            <!--<StackLayout x:Name="filterOptions" Orientation="Vertical" IsVisible="False">
+            <StackLayout x:Name="filterOptions" Orientation="Vertical" IsVisible="False">
                 <SearchBar x:Name="filterSearchBar" Placeholder="Enter filter criteria..." VerticalOptions="CenterAndExpand" Background="White"/>
-            </StackLayout>-->
+            </StackLayout>
 
             <StackLayout Orientation="Horizontal" BackgroundColor="#1976D2" Padding="10, 10, 10, 10">
                 <Frame x:Name="SenesteNytFrame" BackgroundColor="Transparent" HorizontalOptions="StartAndExpand" VerticalOptions="Center" Padding="10" CornerRadius="5">

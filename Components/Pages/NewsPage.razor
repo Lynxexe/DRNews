@@ -7,43 +7,6 @@
 @page "/news/{selectedCategory}"
 @inject INewsService newsService
 
-<style>
-    .news-container {
-        display: flex;
-        align-items: center;
-        position: relative; /* Set position relative for the parent container */
-        padding: 10px;
-    }
-
-    .image-container {
-        position: absolute; /* Position the image container absolutely */
-        top: 50%; /* Move the image container to the vertical center */
-        left: 20px; /* Adjust the left offset as needed */
-        transform: translateY(-50%); /* Center the image container vertically */
-        width: 100px; /* Increase the width to make the circle bigger */
-        height: 100px; /* Increase the height to make the circle bigger */
-    }
-
-    .news-image {
-        width: 100%; /* Set the width of the image to fill the container */
-        height: 100%; /* Set the height of the image to fill the container */
-        object-fit: cover; /* Ensure images maintain aspect ratio and cover the space */
-        border-radius: 50%; /* Create a circular shape */
-    }
-
-    .content-container {
-        margin-left: 140px; /* Adjust the left margin to create space for the larger image */
-    }
-
-    .content {
-        position: absolute; /* Position the content container absolutely */
-        top: 50%; /* Move the content container to the vertical center */
-        left: 0; /* Align the content container to the left */
-        transform: translateY(-50%); /* Center the content container vertically */
-    }
-</style>
-
-
 @if (newsItems == null)
 {
     <p>Loading...</p>
@@ -51,9 +14,9 @@
 else
 {
     <div>
-        <button @onclick='() => FilterNewsItems("SenesteNyt")'>Seneste Nyt</button>
+@*         <button @onclick='() => FilterNewsItems("SenesteNyt")'>Seneste Nyt</button>
         <button @onclick='() => FilterNewsItems("Indland")'>Indland</button>
-        <button @onclick='() => FilterNewsItems("Udland")'>Udland</button>
+        <button @onclick='() => FilterNewsItems("Udland")'>Udland</button> *@
     </div>
         @foreach (var item in newsItems)
         {
@@ -77,30 +40,34 @@ else
         </div>
         }
 }
-
 @code {
+    [Inject]
+    private NavigationManager NavigationManager { get; set; }
     private List<NewsItem> newsItems;
-
 
     [Parameter]
     public string selectedCategory { get; set; } = "SenesteNyt";
-    [Inject]
-    private NavigationManager NavigationManager { get; set; }
+
+
     protected override async Task OnInitializedAsync()
     {
-        await base.OnInitializedAsync();
-
-        newsItems = await newsService.GetNewsAsync(selectedCategory);
-    }
-    private async Task LoadNewsItems()
-    {
-        newsItems = await newsService.GetNewsAsync(selectedCategory);
-    }
-
-    private async Task FilterNewsItems(string category)
+        // Listen for category selection messages
+        MessagingCenter.Subscribe<MainPage, string>(this, "CategorySelected", async (sender, category) =>
     {
         selectedCategory = category;
-        Console.WriteLine(selectedCategory);
-        await LoadNewsItems();
+        await LoadNewsItems(selectedCategory);
+        StateHasChanged(); // Ensure UI refresh after category change
+    });
+
+
+        // Load news items for the default category
+        await LoadNewsItems(selectedCategory);
+    }
+
+    private async Task LoadNewsItems(string category)
+    {
+        // Load news items based on the selected category
+        newsItems = await newsService.GetNewsAsync(category);
     }
 }
+

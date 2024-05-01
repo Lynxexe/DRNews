@@ -19,40 +19,45 @@ namespace DRNews
             lastSelectedFrame = SenesteNytFrame;
             SenesteNytFrame.BackgroundColor = selectedColor;
         }
-        private void SenesteNytLabel_Tapped(object sender, EventArgs e)
+        private async void SenesteNytLabel_Tapped(object sender, EventArgs e)
         {
             if (selectedCategory != "SenesteNyt")
             {
                 selectedCategory = "SenesteNyt";
-
+                SendMessage(selectedCategory);
             }
-
             UpdateButtonAppearance(SenesteNytFrame);
         }
 
-        private void IndlandLabel_Tapped(object sender, EventArgs e)
+        private async void IndlandLabel_Tapped(object sender, EventArgs e)
         {
             if (selectedCategory != "Indland")
             {
                 selectedCategory = "Indland";
+                SendMessage(selectedCategory);
             }
             UpdateButtonAppearance(IndlandFrame);
-
         }
 
-        private void UdlandLabel_Tapped(object sender, EventArgs e)
+        private async void UdlandLabel_Tapped(object sender, EventArgs e)
         {
             if (selectedCategory != "Udland")
             {
                 selectedCategory = "Udland";
+                SendMessage(selectedCategory);
             }
             UpdateButtonAppearance(UdlandFrame);
         }
-        //private void Frame_Tapped(object sender, EventArgs e)
-        //{
-        //    var tappedFrame = sender as Frame;
-        //    UpdateButtonAppearance(tappedFrame);
-        //}
+
+        private void SendMessage(string category)
+        {
+            MessagingCenter.Send(this, "CategorySelected", category);
+        }
+        private void FilterButton_Clicked(object sender, EventArgs e)
+        {
+            filterOptions.IsVisible = !filterOptions.IsVisible;
+        }
+
         private void UpdateButtonAppearance(Frame currentFrame)
         {
             lastSelectedFrame.BackgroundColor = mainColor;
