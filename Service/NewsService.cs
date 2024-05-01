@@ -25,7 +25,7 @@ namespace DRNews.Service
                     throw new ArgumentException("Invalid category");
             }
         }
-        public async Task<List<NewsItem>> GetNewsAsync(string? category)
+        public async Task<List<NewsItem>> GetNewsAsync(string? category, string filter)
         {
             var httpClient = new HttpClient();
             var feedUrl = GetFeedUrlForCategory(category);
@@ -47,6 +47,20 @@ namespace DRNews.Service
                                });
             items.AddRange(news);
 
+            if (!string.IsNullOrEmpty(filter))
+            {
+
+                string[] filters = filter.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries)
+                                 .Select(f => f.Trim())
+                                 .ToArray();
+                foreach (var filterString in filters)
+                {
+                    if (!string.IsNullOrEmpty(filterString))
+                    {
+                        items = items.Where(x => !x.Title.Contains(filterString, StringComparison.OrdinalIgnoreCase)).ToList();
+                    }
+                }
+            }
             // Format dates
             items = await FormatNewsDatesAsync(items);
             items = items.OrderByDescending(item => DateTime.Parse(item.DateObject)).ToList();
@@ -89,6 +103,42 @@ namespace DRNews.Service
                     return item;
                 }).ToList();
             });
+        }
+        public async Task<List<NewsItem>> UpdateNewsFeed(List<NewsItem> currentItems, string selectedCategory, string Filter)
+        {
+            // Fetch the latest news feed
+            var latestNews = await GetNewsAsync(selectedCategory, Filter);
+            var returnItems = currentItems;
+            // Update existing news items and add new entries
+            foreach (var news in latestNews)
+            {
+                var existingItem = returnItems.FirstOrDefault(item => item.Link == news.Link);
+                if (existingItem != null)
+                {
+                    // Compare properties individually and update if changed
+                    if (existingItem.Title != news.Title)
+                        existingItem.Title = news.Title;
+
+                    if (existingItem.Date != news.Date)
+                        existingItem.Date = news.Date;
+
+                    if (existingItem.Image != news.Image)
+                        existingItem.Image = news.Image;
+
+                    if (existingItem.DateObject != news.DateObject)
+                        existingItem.DateObject = news.DateObject;
+                }
+                else
+                {
+                    // Add new entry to the existing news items list
+                    returnItems.Add(news);
+                }
+            }
+            returnItems = returnItems.OrderByDescending(item => DateTime.Parse(item.DateObject)).ToList();
+
+            // Update the formatted dates
+            returnItems = await FormatNewsDatesAsync(returnItems);
+            return returnItems;
         }
     }
     }

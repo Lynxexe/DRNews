@@ -50,11 +50,6 @@
 }
 else
 {
-    <div>
-@*         <button @onclick='() => FilterNewsItems("SenesteNyt")'>Seneste Nyt</button>
-        <button @onclick='() => FilterNewsItems("Indland")'>Indland</button>
-        <button @onclick='() => FilterNewsItems("Udland")'>Udland</button> *@
-    </div>
         @foreach (var item in newsItems)
         {
         <div class="news-container">
@@ -108,74 +103,12 @@ else
     private async Task LoadNewsItems(string category, string filter)
     {
         // Load news items based on the selected category
-        newsItems = await newsService.GetNewsAsync(category);
-
-        if (!string.IsNullOrEmpty(filter))
-        {
-
-            string[] filters = filter.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries)
-                             .Select(f => f.Trim())
-                             .ToArray();
-            foreach (var filterString in filters)
-            {
-                if (!string.IsNullOrEmpty(filterString))
-                {
-                    newsItems = newsItems.Where(x => !x.Title.Contains(filterString, StringComparison.OrdinalIgnoreCase)).ToList();
-                }
-            }
-        }
-
+        newsItems = await newsService.GetNewsAsync(category,Filter);
     }
     private async Task UpdateNewsFeed()
     {
         Console.WriteLine("Updating news feed...");
-        // Fetch the latest news feed
-        var latestNews = await newsService.GetNewsAsync(selectedCategory);
-
-        // Update existing news items and add new entries
-        foreach (var news in latestNews)
-        {
-            var existingItem = newsItems.FirstOrDefault(item => item.Link == news.Link);
-            if (existingItem != null)
-            {
-                // Compare properties individually and update if changed
-                if (existingItem.Title != news.Title)
-                    existingItem.Title = news.Title;
-
-                if (existingItem.Date != news.Date)
-                    existingItem.Date = news.Date;
-
-                if (existingItem.Image != news.Image)
-                    existingItem.Image = news.Image;
-
-                if (existingItem.DateObject != news.DateObject)
-                    existingItem.DateObject = news.DateObject;
-            }
-            else
-            {
-                // Add new entry to the existing news items list
-                newsItems.Add(news);
-            }
-        }
-        if (!string.IsNullOrEmpty(Filter))
-        {
-
-            string[] filters = Filter.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries)
-                             .Select(f => f.Trim())
-                             .ToArray();
-            foreach (var filterString in filters)
-            {
-                if (!string.IsNullOrEmpty(filterString))
-                {
-                    newsItems = newsItems.Where(x => !x.Title.Contains(filterString, StringComparison.OrdinalIgnoreCase)).ToList();
-                }
-            }
-        }
-        // Sort the news items by date
-        newsItems = newsItems.OrderByDescending(item => DateTime.Parse(item.DateObject)).ToList();
-
-        // Update the formatted dates
-        newsItems = await newsService.FormatNewsDatesAsync(newsItems);
+        newsItems = await newsService.UpdateNewsFeed(newsItems, selectedCategory, Filter);
 
         // Invoke StateHasChanged to update the UI
         await InvokeAsync(() => StateHasChanged());

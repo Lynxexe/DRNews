@@ -9,7 +9,8 @@ namespace DRNews.Service
 {
     public interface INewsService
     {
-        Task<List<NewsItem>> GetNewsAsync(string selectedCategory);
+        Task<List<NewsItem>> GetNewsAsync(string selectedCategory, string filter);
         Task<List<NewsItem>> FormatNewsDatesAsync(List<NewsItem> items);
+        Task<List<NewsItem>> UpdateNewsFeed(List<NewsItem> currentItems, string selectedCategory, string Filter);
     }
 }
