@@ -13,7 +13,7 @@
                 <Button x:Name="filterButton" Text="Filter" Clicked="FilterButton_Clicked" VerticalOptions="Center"/>
             </StackLayout>
             <StackLayout x:Name="filterOptions" Orientation="Vertical" IsVisible="False">
-                <SearchBar x:Name="filterSearchBar" Placeholder="Enter filter criteria..." VerticalOptions="CenterAndExpand" Background="White"/>
+                <SearchBar x:Name="filterSearchBar" Placeholder="Enter filter out criteria seperated by ','... " VerticalOptions="CenterAndExpand" Background="White"/>
             </StackLayout>
 
             <StackLayout Orientation="Horizontal" BackgroundColor="#1976D2" Padding="10, 10, 10, 10">

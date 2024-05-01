@@ -1,5 +1,6 @@
 ﻿using DRNews.Components.Pages;
 using DRNews.Service;
+using DRNews.Model;
 using Microsoft.AspNetCore.Components;
 
 namespace DRNews
@@ -11,6 +12,7 @@ namespace DRNews
         private Color mainColor = Color.FromHex("#1976D2"); // Main color
         private Color selectedColor = Color.FromHex("#FFA500");
         private static INewsService NewsService;
+        private Message message;
         public MainPage(INewsService newsService)
         {
 
@@ -18,13 +20,16 @@ namespace DRNews
             NewsService = newsService;
             lastSelectedFrame = SenesteNytFrame;
             SenesteNytFrame.BackgroundColor = selectedColor;
+            message = new Message() { Category=selectedCategory, Filter=""};
+            filterSearchBar.TextChanged += FilterSearchBar_TextChanged;
         }
         private async void SenesteNytLabel_Tapped(object sender, EventArgs e)
         {
             if (selectedCategory != "SenesteNyt")
             {
                 selectedCategory = "SenesteNyt";
-                SendMessage(selectedCategory);
+                message = new Message() { Category = selectedCategory, Filter = filterSearchBar.Text };
+                SendMessage(message);
             }
             UpdateButtonAppearance(SenesteNytFrame);
         }
@@ -34,7 +39,8 @@ namespace DRNews
             if (selectedCategory != "Indland")
             {
                 selectedCategory = "Indland";
-                SendMessage(selectedCategory);
+                message = new Message() { Category = selectedCategory, Filter = filterSearchBar.Text };
+                SendMessage(message);
             }
             UpdateButtonAppearance(IndlandFrame);
         }
@@ -44,20 +50,25 @@ namespace DRNews
             if (selectedCategory != "Udland")
             {
                 selectedCategory = "Udland";
-                SendMessage(selectedCategory);
+                message = new Message() { Category = selectedCategory, Filter = filterSearchBar.Text };
+                SendMessage(message);
             }
             UpdateButtonAppearance(UdlandFrame);
         }
 
-        private void SendMessage(string category)
+        private void SendMessage(Message message)
         {
-            MessagingCenter.Send(this, "CategorySelected", category);
+            MessagingCenter.Send(this, "CategorySelected", message);
         }
         private void FilterButton_Clicked(object sender, EventArgs e)
         {
             filterOptions.IsVisible = !filterOptions.IsVisible;
         }
-
+        private void FilterSearchBar_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            message.Filter = e.NewTextValue;
+            SendMessage(message);
+        }
         private void UpdateButtonAppearance(Frame currentFrame)
         {
             lastSelectedFrame.BackgroundColor = mainColor;

@@ -43,52 +43,52 @@ namespace DRNews.Service
                                    Link = (string)item.Element("link"),
                                    Date = (string)item.Element("pubDate"),
                                    Image = (string)item.Descendants(mediaNameSpace + "content").FirstOrDefault()?.Attribute("url")?.Value,
-                                   DateObject = (string)item.Element("pubDate")
+                                   DateObject = (string)item.Element("pubDate"),
                                });
             items.AddRange(news);
 
             // Format dates
-            items = items.Select(item =>
-            {
-                // Parse the date string into a DateTime object
-                DateTime newsDate = DateTime.Parse(item.Date);
-                // Calculate the time difference
-                TimeSpan difference = DateTime.UtcNow - newsDate;
-                string formattedDate;
-                if (difference.TotalSeconds >= 0)
-                {
-                    if (difference.TotalDays >= 1)
-                    {
-                        // If the difference is more than or equal to 1 day, display it in days
-                        formattedDate = $"{(int)difference.TotalDays} days ago";
-                    }
-                    else if (difference.TotalHours >= 1)
-                    {
-                        // If the difference is less than 1 day but more than or equal to 1 hour, display it in hours
-                        formattedDate = $"{(int)difference.TotalHours} hours ago";
-                    }
-                    else if (difference.TotalMinutes >= 1)
-                    {
-                        // If the difference is less than 1 hour but more than or equal to 1 minute, display it in minutes
-                        formattedDate = $"{(int)difference.TotalMinutes} minutes ago";
-                    }
-                    else
-                    {
-                        // Otherwise, display it in seconds
-                        formattedDate = $"{(int)difference.TotalSeconds} seconds ago";
-                    }
-                }
-                else
-                {
-                    formattedDate = "just now";
-                }
-                // Update the Date property with the formatted date
-                item.Date = formattedDate;
-                return item;
-            }).ToList();
+            items = await FormatNewsDatesAsync(items);
             items = items.OrderByDescending(item => DateTime.Parse(item.DateObject)).ToList();
 
             return items; // Return the list of news items
+        }
+        public async Task<List<NewsItem>> FormatNewsDatesAsync(List<NewsItem> items)
+        {
+            return await Task.Run(() =>
+            {
+                return items.Select(item =>
+                {
+                    DateTime newsDate = DateTime.Parse(item.DateObject);
+                    TimeSpan difference = DateTime.UtcNow - newsDate;
+                    string formattedDate;
+                    if (difference.TotalSeconds >= 0)
+                    {
+                        if (difference.TotalDays >= 1)
+                        {
+                            formattedDate = $"{(int)difference.TotalDays} days ago";
+                        }
+                        else if (difference.TotalHours >= 1)
+                        {
+                            formattedDate = $"{(int)difference.TotalHours} hours ago";
+                        }
+                        else if (difference.TotalMinutes >= 1)
+                        {
+                            formattedDate = $"{(int)difference.TotalMinutes} minutes ago";
+                        }
+                        else
+                        {
+                            formattedDate = $"{(int)difference.TotalSeconds} seconds ago";
+                        }
+                    }
+                    else
+                    {
+                        formattedDate = "just now";
+                    }
+                    item.Date = formattedDate;
+                    return item;
+                }).ToList();
+            });
         }
     }
     }

@@ -85,26 +85,86 @@ else
     [Parameter]
     public string selectedCategory { get; set; } = "SenesteNyt";
 
+    public string Filter { get; set; } = "";
+
+    private Timer updateTimer;
+    private readonly TimeSpan updateInterval = TimeSpan.FromSeconds(30); 
 
     protected override async Task OnInitializedAsync()
     {
+        await LoadNewsItems(selectedCategory, Filter);
         // Listen for category selection messages
-        MessagingCenter.Subscribe<MainPage, string>(this, "CategorySelected", async (sender, category) =>
+        MessagingCenter.Subscribe<MainPage, Message>(this, "CategorySelected", async (sender, message) =>
     {
-        selectedCategory = category;
-        await LoadNewsItems(selectedCategory);
+        selectedCategory = message.Category;
+        Filter = message.Filter;
+        await LoadNewsItems(selectedCategory, Filter);
         StateHasChanged(); // Ensure UI refresh after category change
     });
-
-
-        // Load news items for the default category
-        await LoadNewsItems(selectedCategory);
+        updateTimer = new Timer(async (_) => await UpdateNewsFeed(), null, TimeSpan.Zero, updateInterval);
     }
 
-    private async Task LoadNewsItems(string category)
+    private async Task LoadNewsItems(string category, string filter)
     {
         // Load news items based on the selected category
         newsItems = await newsService.GetNewsAsync(category);
+
+        if (!string.IsNullOrEmpty(filter))
+        {
+
+            string[] filters = filter.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries)
+                             .Select(f => f.Trim())
+                             .ToArray();
+            foreach (var filterString in filters)
+            {
+                if (!string.IsNullOrEmpty(filterString))
+                {
+                    newsItems = newsItems.Where(x => !x.Title.Contains(filterString, StringComparison.OrdinalIgnoreCase)).ToList();
+                }
+            }
+        }
+
+    }
+    private async Task UpdateNewsFeed()
+    {
+        Console.WriteLine("Updating news feed...");
+        // Fetch the latest news feed
+        var latestNews = await newsService.GetNewsAsync(selectedCategory);
+
+        // Update existing news items and add new entries
+        foreach (var news in latestNews)
+        {
+            var existingItem = newsItems.FirstOrDefault(item => item.Link == news.Link);
+            if (existingItem != null)
+            {
+                // Compare properties individually and update if changed
+                if (existingItem.Title != news.Title)
+                    existingItem.Title = news.Title;
+
+                if (existingItem.Date != news.Date)
+                    existingItem.Date = news.Date;
+
+                if (existingItem.Image != news.Image)
+                    existingItem.Image = news.Image;
+
+                if (existingItem.DateObject != news.DateObject)
+                    existingItem.DateObject = news.DateObject;
+            }
+            else
+            {
+                // Add new entry to the existing news items list
+                newsItems.Add(news);
+            }
+        }
+
+        // Sort the news items by date
+        newsItems = newsItems.OrderByDescending(item => DateTime.Parse(item.DateObject)).ToList();
+
+        // Update the formatted dates
+        newsItems = await newsService.FormatNewsDatesAsync(newsItems);
+
+        // Invoke StateHasChanged to update the UI
+        await InvokeAsync(() => StateHasChanged());
     }
 }
 
