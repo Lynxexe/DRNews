@@ -52,20 +52,18 @@ else
     protected override async Task OnInitializedAsync()
     {
         await LoadNewsItems(selectedCategory, Filter);
-        // Listen for category selection messages
         MessagingCenter.Subscribe<MainPage, Message>(this, "CategorySelected", async (sender, message) =>
     {
         selectedCategory = message.Category;
         Filter = message.Filter;
         await LoadNewsItems(selectedCategory, Filter);
-        StateHasChanged(); // Ensure UI refresh after category change
+        StateHasChanged();
     });
         updateTimer = new Timer(async (_) => await UpdateNewsFeed(), null, TimeSpan.Zero, updateInterval);
     }
 
     private async Task LoadNewsItems(string category, string filter)
     {
-        // Load news items based on the selected category
         newsItems = await newsService.GetNewsAsync(category,Filter);
     }
     private async Task UpdateNewsFeed()
@@ -73,7 +71,6 @@ else
         Console.WriteLine("Updating news feed...");
         newsItems = await newsService.UpdateNewsFeed(newsItems, selectedCategory, Filter);
 
-        // Invoke StateHasChanged to update the UI
         await InvokeAsync(() => StateHasChanged());
     }
 }

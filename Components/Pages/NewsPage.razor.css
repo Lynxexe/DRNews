@@ -2,33 +2,33 @@
 .news-container {
     display: flex;
     align-items: center;
-    position: relative; /* Set position relative for the parent container */
+    position: relative;
     padding: 10px;
 }
 
 .image-container {
-    position: absolute; /* Position the image container absolutely */
-    top: 50%; /* Move the image container to the vertical center */
-    left: 20px; /* Adjust the left offset as needed */
-    transform: translateY(-50%); /* Center the image container vertically */
-    width: 100px; /* Increase the width to make the circle bigger */
-    height: 100px; /* Increase the height to make the circle bigger */
+    position: absolute;
+    top: 50%;
+    left: 20px;
+    transform: translateY(-50%);
+    width: 100px; 
+    height: 100px;
 }
 
 .news-image {
-    width: 100%; /* Set the width of the image to fill the container */
-    height: 100%; /* Set the height of the image to fill the container */
-    object-fit: cover; /* Ensure images maintain aspect ratio and cover the space */
-    border-radius: 50%; /* Create a circular shape */
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
 }
 
 .content-container {
-    margin-left: 140px; /* Adjust the left margin to create space for the larger image */
+    margin-left: 140px;
 }
 
 .content {
-    position: absolute; /* Position the content container absolutely */
-    top: 50%; /* Move the content container to the vertical center */
-    left: 0; /* Align the content container to the left */
-    transform: translateY(-50%); /* Center the content container vertically */
+    position: absolute; 
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%);
 }

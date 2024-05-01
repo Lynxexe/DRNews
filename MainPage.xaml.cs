@@ -9,7 +9,7 @@ namespace DRNews
     {
         private static string selectedCategory = "SenesteNyt";
         private Frame lastSelectedFrame;
-        private Color mainColor = Color.FromHex("#1976D2"); // Main color
+        private Color mainColor = Color.FromHex("#1976D2");
         private Color selectedColor = Color.FromHex("#FFA500");
         private static INewsService NewsService;
         private Message message;
@@ -66,9 +66,7 @@ namespace DRNews
         }
         private void FilterSearchBar_TextChanged(object sender, TextChangedEventArgs e)
         {
-            // Update the message filter with the new text
             message.Filter = e.NewTextValue;
-            // Send the updated message
             SendMessage(message);
         }
         private void UpdateButtonAppearance(Frame currentFrame)

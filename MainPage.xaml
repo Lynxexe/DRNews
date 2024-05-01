@@ -7,7 +7,6 @@
              BackgroundColor="{DynamicResource PageBackgroundColor}">
     <ScrollView>
         <StackLayout>
-
             <StackLayout Orientation="Horizontal" BackgroundColor="#2196F3" Padding="10, 20, 10, 10">
                 <Label Text="Home" TextColor="White" HorizontalOptions="StartAndExpand" VerticalOptions="Center" FontSize="Large"/>
                 <Button x:Name="filterButton" Text="Filter" Clicked="FilterButton_Clicked" VerticalOptions="Center"/>
@@ -15,7 +14,7 @@
             <StackLayout x:Name="filterOptions" Orientation="Vertical" IsVisible="False">
                 <SearchBar x:Name="filterSearchBar" Placeholder="Enter filter out criteria seperated by ','... " VerticalOptions="CenterAndExpand" Background="White"/>
             </StackLayout>
-
+            
             <StackLayout Orientation="Horizontal" BackgroundColor="#1976D2" Padding="10, 10, 10, 10">
                 <Frame x:Name="SenesteNytFrame" BackgroundColor="Transparent" HorizontalOptions="StartAndExpand" VerticalOptions="Center" Padding="10" CornerRadius="5">
                     <Frame.GestureRecognizers>
@@ -23,6 +22,7 @@
                     </Frame.GestureRecognizers>
                     <Label Text="Seneste Nyt" TextColor="White" FontSize="Medium" HorizontalOptions="Center" VerticalOptions="Center" />
                 </Frame>
+                
                 <Frame x:Name="IndlandFrame" BackgroundColor="Transparent" HorizontalOptions="CenterAndExpand" VerticalOptions="Center" Padding="10" CornerRadius="5">
                     <Frame.GestureRecognizers>
                         <TapGestureRecognizer Tapped="IndlandLabel_Tapped"/>
@@ -36,8 +36,7 @@
                     <Label Text="Udland" TextColor="White" FontSize="Medium" HorizontalOptions="Center" VerticalOptions="Center" />
                 </Frame>
             </StackLayout>
-
-
+            
             <BlazorWebView x:Name="blazorWebView" HostPage="wwwroot/index.html">
                 <BlazorWebView.RootComponents>
                     <RootComponent x:Name ="rootComponent" Selector="#app" ComponentType="{x:Type news:NewsPage}" />

@@ -10,7 +10,7 @@ namespace DRNews.Service
 {
     internal class NewsService : INewsService
     {
-        
+
         private string GetFeedUrlForCategory(string category)
         {
             switch (category)
@@ -61,11 +61,10 @@ namespace DRNews.Service
                     }
                 }
             }
-            // Format dates
             items = await FormatNewsDatesAsync(items);
             items = items.OrderByDescending(item => DateTime.Parse(item.DateObject)).ToList();
 
-            return items; // Return the list of news items
+            return items;
         }
         public async Task<List<NewsItem>> FormatNewsDatesAsync(List<NewsItem> items)
         {
@@ -106,16 +105,13 @@ namespace DRNews.Service
         }
         public async Task<List<NewsItem>> UpdateNewsFeed(List<NewsItem> currentItems, string selectedCategory, string Filter)
         {
-            // Fetch the latest news feed
             var latestNews = await GetNewsAsync(selectedCategory, Filter);
             var returnItems = currentItems;
-            // Update existing news items and add new entries
             foreach (var news in latestNews)
             {
                 var existingItem = returnItems.FirstOrDefault(item => item.Link == news.Link);
                 if (existingItem != null)
                 {
-                    // Compare properties individually and update if changed
                     if (existingItem.Title != news.Title)
                         existingItem.Title = news.Title;
 
@@ -130,15 +126,13 @@ namespace DRNews.Service
                 }
                 else
                 {
-                    // Add new entry to the existing news items list
                     returnItems.Add(news);
                 }
             }
             returnItems = returnItems.OrderByDescending(item => DateTime.Parse(item.DateObject)).ToList();
-
-            // Update the formatted dates
             returnItems = await FormatNewsDatesAsync(returnItems);
+
             return returnItems;
         }
     }
-    }
+}
