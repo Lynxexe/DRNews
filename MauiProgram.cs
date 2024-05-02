@@ -1,6 +1,5 @@
 ﻿using DRNews.Service;
 using Microsoft.Extensions.Logging;
-
 namespace DRNews
 {
     public static class MauiProgram

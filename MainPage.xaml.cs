@@ -25,31 +25,27 @@ namespace DRNews
         }
         private async void SenesteNytLabel_Tapped(object sender, EventArgs e)
         {
-            if (selectedCategory != "SenesteNyt")
-            {
-                selectedCategory = "SenesteNyt";
-                SendMessage();
-            }
+
+            selectedCategory = "SenesteNyt";
+            SendMessage();
             UpdateButtonAppearance(SenesteNytFrame);
         }
 
         private async void IndlandLabel_Tapped(object sender, EventArgs e)
         {
-            if (selectedCategory != "Indland")
-            {
-                selectedCategory = "Indland";
-                SendMessage();
-            }
+
+            selectedCategory = "Indland";
+            SendMessage();
+            
             UpdateButtonAppearance(IndlandFrame);
         }
 
         private async void UdlandLabel_Tapped(object sender, EventArgs e)
         {
-            if (selectedCategory != "Udland")
-            {
-                selectedCategory = "Udland";
-                SendMessage();
-            }
+
+            selectedCategory = "Udland";
+            SendMessage();
+            
             UpdateButtonAppearance(UdlandFrame);
         }
 

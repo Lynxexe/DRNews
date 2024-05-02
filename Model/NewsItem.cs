@@ -13,5 +13,6 @@ namespace DRNews.Model
         public string Date { get; set; }
         public string Image { get; set; }
         public string DateObject { get; set; }
+        public string Content { get; set;}
     }
 }

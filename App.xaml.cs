@@ -9,7 +9,6 @@ namespace DRNews
         {
             InitializeComponent();
             MainPage = new MainPage(newsService);
-
         }
     }
 }

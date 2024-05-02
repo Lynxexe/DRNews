@@ -4,7 +4,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using AngleSharp;
+using AngleSharp.Dom;
 using System.Xml.Linq;
+using System.Net.Http;
+using HtmlAgilityPack;
 
 namespace DRNews.Service
 {
@@ -133,6 +137,47 @@ namespace DRNews.Service
             returnItems = await FormatNewsDatesAsync(returnItems);
 
             return returnItems;
+        }
+        public async Task<string> GetNewsItemHtmlAsync(string newsItemLink)
+        {
+            using (var httpClient = new HttpClient())
+            {
+                try
+                {
+                    var htmlContent = await httpClient.GetStringAsync(newsItemLink);
+
+
+                    // Load HTML content into HtmlDocument
+                    HtmlDocument doc = new HtmlDocument();
+                    doc.LoadHtml(htmlContent);
+
+                    // Select the first hydra-latest-news-page__short-news-item dre-variables element
+                    var item = doc.DocumentNode.SelectSingleNode("//div[contains(@class, 'hydra-latest-news-page__short-news-item') and contains(@class, 'dre-variables')]");
+
+                    if (item != null)
+                    {
+                        // Select all <p> elements within the selected item
+                        var paragraphs = item.SelectNodes(".//p");
+
+                        if (paragraphs != null)
+                        {
+                            // Concatenate the text content of all selected paragraphs
+                            string content = "";
+                            foreach (var paragraph in paragraphs)
+                            {
+                                content += paragraph.InnerText + "\n";
+                            }
+                            return content;
+                        }
+                    }
+                    return null;
+                }
+                catch (Exception ex)
+                {
+                    // Handle exceptions if needed
+                    return null;
+                }
+            }
         }
     }
 }

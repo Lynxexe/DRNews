@@ -11,35 +11,63 @@
 {
     <p>Loading...</p>
 }
-else
+
+
+@if(selectedNewsItem == null && newsItems != null)
 {
         @foreach (var item in newsItems)
         {
-        <div class="news-container">
-            @if (!string.IsNullOrEmpty(item.Image))
-            {
-                <div class="image-container">
-                    <img src="@item.Image" alt="News Image" class="news-image" />
-                </div>
-            }
-            else
-            {
-                <div class="image-container">
-                    <img src="images/newsimage.jpg" alt="News Image" class="news-image" />
-                </div>
-            }
-            <div class="content-container">
-                <h4>@item.Title</h4>
+            <div class="news-container" @onclick="() => OpenNewsItem(item)">
+                @if (!string.IsNullOrEmpty(item.Image))
+                {
+                    <div class="image-container">
+                        <img src="@item.Image" alt="News Image" class="news-image" />
+                    </div>
+                }
+                else
+                {
+                    <div class="image-container">
+                        <img src="images/newsimage.jpg" alt="News Image" class="news-image" />
+                    </div>
+                }
+                <div class="content-container">
+                    <h4>@item.Title</h4>
 
-                <p class="news-date">@item.Date</p>
+                    <p class="news-date">@item.Date</p>
+                </div>
             </div>
-        </div>
         }
+}
+else if(selectedNewsItem != null)
+{
+    @if (!string.IsNullOrEmpty(selectedNewsItem.Image))
+    {
+        <div class="image-container">
+            <img src="@selectedNewsItem.Image" alt="News Image" class="news-image" />
+        </div>
+    }
+    else
+    {
+        <div class="image-container">
+            <img src="images/newsimage.jpg" alt="News Image" class="news-image" />
+        </div>
+    }
+    <div class="news-item">
+
+        <h2>@selectedNewsItem.Title</h2>
+
+        @foreach (var sentence in selectedNewsItem.Content.Split('\n'))
+        {
+            <p>@sentence</p>
+        }
+        <button class="btn btn-primary btn-lg btn-block" id="lukKnap" @onclick="CloseNewsItem">Close</button>
+    </div>
 }
 @code {
     [Inject]
     private NavigationManager NavigationManager { get; set; }
     private List<NewsItem> newsItems;
+    private NewsItem selectedNewsItem;
 
     [Parameter]
     public string selectedCategory { get; set; } = "SenesteNyt";
@@ -52,10 +80,13 @@ else
     protected override async Task OnInitializedAsync()
     {
         await LoadNewsItems(selectedCategory, Filter);
+        selectedNewsItem = null;
         MessagingCenter.Subscribe<MainPage, Message>(this, "CategorySelected", async (sender, message) =>
     {
+        selectedNewsItem = null;
         selectedCategory = message.Category;
         Filter = message.Filter;
+
         await LoadNewsItems(selectedCategory, Filter);
         StateHasChanged();
     });
@@ -65,6 +96,7 @@ else
     private async Task LoadNewsItems(string category, string filter)
     {
         newsItems = await newsService.GetNewsAsync(category,Filter);
+        selectedNewsItem = null;
     }
     private async Task UpdateNewsFeed()
     {
@@ -73,5 +105,20 @@ else
 
         await InvokeAsync(() => StateHasChanged());
     }
+    private async Task OpenNewsItem(NewsItem item)
+    {
+        var content = await newsService.GetNewsItemHtmlAsync(item.Link);
+        Console.WriteLine(content);
+        selectedNewsItem = item;
+        selectedNewsItem.Content = content;
+        await InvokeAsync(() => StateHasChanged());
+    }
+    private void CloseNewsItem()
+    {
+        
+        selectedNewsItem = null;
+        StateHasChanged();
+    }
+
 }
 

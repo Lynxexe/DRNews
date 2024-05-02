@@ -12,5 +12,6 @@ namespace DRNews.Service
         Task<List<NewsItem>> GetNewsAsync(string selectedCategory, string filter);
         Task<List<NewsItem>> FormatNewsDatesAsync(List<NewsItem> items);
         Task<List<NewsItem>> UpdateNewsFeed(List<NewsItem> currentItems, string selectedCategory, string Filter);
+        Task<string> GetNewsItemHtmlAsync(string newsItemLink);
     }
 }
