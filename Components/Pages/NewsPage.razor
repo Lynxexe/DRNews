@@ -66,39 +66,76 @@ else if(selectedNewsItem != null)
 
     protected override async Task OnInitializedAsync()
     {
-        await LoadNewsItems(selectedCategory, Filter);
+        try
+        {
+            await LoadNewsItems(selectedCategory, Filter);   
+        }
+        catch(Exception e)
+        {
+            Console.WriteLine(e.Message);
+        }
         selectedNewsItem = null;
         MessagingCenter.Subscribe<MainPage, Message>(this, "CategorySelected", async (sender, message) =>
     {
         selectedNewsItem = null;
         selectedCategory = message.Category;
         Filter = message.Filter;
-
-        await LoadNewsItems(selectedCategory, Filter);
-        StateHasChanged();
+        try
+        {
+            await LoadNewsItems(selectedCategory, Filter);
+            StateHasChanged();
+            
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e.Message);
+        }
     });
         updateTimer = new Timer(async (_) => await UpdateNewsFeed(), null, TimeSpan.Zero, updateInterval);
     }
 
     private async Task LoadNewsItems(string category, string filter)
     {
-        newsItems = await newsService.GetNewsAsync(category,Filter);
-        selectedNewsItem = null;
+        try
+        {
+            newsItems = await newsService.GetNewsAsync(category,Filter);
+            selectedNewsItem = null;
+        }
+        catch(Exception e)
+        {
+            Console.WriteLine(e.Message);
+        }
     }
     private async Task UpdateNewsFeed()
     {
         Console.WriteLine("Updating news feed...");
-        newsItems = await newsService.UpdateNewsFeed(newsItems, selectedCategory, Filter);
+        try
+        {
+            newsItems = await newsService.UpdateNewsFeed(newsItems, selectedCategory, Filter);
+            await InvokeAsync(() => StateHasChanged());
 
-        await InvokeAsync(() => StateHasChanged());
+        }
+        catch(Exception e)
+        {
+            Console.WriteLine(e.Message);
+        }
+
     }
     private async Task OpenNewsItem(NewsItem item)
     {
-        var content = await newsService.GetNewsItemHtmlAsync(item.Link);
-        Console.WriteLine(content);
-        selectedNewsItem = item;
-        selectedNewsItem.Content = content;
-        await InvokeAsync(() => StateHasChanged());
+        try
+        {
+            var content = await newsService.GetNewsItemHtmlAsync(item.Link);
+            Console.WriteLine(content);
+            selectedNewsItem = item;
+            selectedNewsItem.Content = content;
+            await InvokeAsync(() => StateHasChanged());
+        }
+        catch(Exception e)
+        {
+            Console.WriteLine(e.Message);
+        }
+
     }
     private void CloseNewsItem()
     {
