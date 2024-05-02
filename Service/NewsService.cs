@@ -145,23 +145,16 @@ namespace DRNews.Service
                 try
                 {
                     var htmlContent = await httpClient.GetStringAsync(newsItemLink);
-
-
-                    // Load HTML content into HtmlDocument
                     HtmlDocument doc = new HtmlDocument();
                     doc.LoadHtml(htmlContent);
-
-                    // Select the first hydra-latest-news-page__short-news-item dre-variables element
                     var item = doc.DocumentNode.SelectSingleNode("//div[contains(@class, 'hydra-latest-news-page__short-news-item') and contains(@class, 'dre-variables')]");
 
                     if (item != null)
                     {
-                        // Select all <p> elements within the selected item
                         var paragraphs = item.SelectNodes(".//p");
 
                         if (paragraphs != null)
                         {
-                            // Concatenate the text content of all selected paragraphs
                             string content = "";
                             foreach (var paragraph in paragraphs)
                             {
@@ -174,7 +167,6 @@ namespace DRNews.Service
                 }
                 catch (Exception ex)
                 {
-                    // Handle exceptions if needed
                     return null;
                 }
             }
