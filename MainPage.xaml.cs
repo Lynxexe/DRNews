@@ -28,8 +28,7 @@ namespace DRNews
             if (selectedCategory != "SenesteNyt")
             {
                 selectedCategory = "SenesteNyt";
-                message = new Message() { Category = selectedCategory, Filter = filterSearchBar.Text };
-                SendMessage(message);
+                SendMessage();
             }
             UpdateButtonAppearance(SenesteNytFrame);
         }
@@ -39,8 +38,7 @@ namespace DRNews
             if (selectedCategory != "Indland")
             {
                 selectedCategory = "Indland";
-                message = new Message() { Category = selectedCategory, Filter = filterSearchBar.Text };
-                SendMessage(message);
+                SendMessage();
             }
             UpdateButtonAppearance(IndlandFrame);
         }
@@ -50,14 +48,15 @@ namespace DRNews
             if (selectedCategory != "Udland")
             {
                 selectedCategory = "Udland";
-                message = new Message() { Category = selectedCategory, Filter = filterSearchBar.Text };
-                SendMessage(message);
+                SendMessage();
             }
             UpdateButtonAppearance(UdlandFrame);
         }
 
-        private void SendMessage(Message message)
+        private void SendMessage()
         {
+            message.Category = selectedCategory;
+            message.Filter = filterSearchBar.Text;
             MessagingCenter.Send(this, "CategorySelected", message);
         }
         private void FilterButton_Clicked(object sender, EventArgs e)
@@ -67,7 +66,7 @@ namespace DRNews
         private void FilterSearchBar_TextChanged(object sender, TextChangedEventArgs e)
         {
             message.Filter = e.NewTextValue;
-            SendMessage(message);
+            SendMessage();
         }
         private void UpdateButtonAppearance(Frame currentFrame)
         {
