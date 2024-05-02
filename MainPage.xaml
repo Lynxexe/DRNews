@@ -36,7 +36,7 @@
                     <Label Text="Udland" TextColor="White" FontSize="Medium" HorizontalOptions="Center" VerticalOptions="Center" />
                 </Frame>
             </StackLayout>
-            
+
             <BlazorWebView x:Name="blazorWebView" HostPage="wwwroot/index.html">
                 <BlazorWebView.RootComponents>
                     <RootComponent x:Name ="rootComponent" Selector="#app" ComponentType="{x:Type news:NewsPage}" />

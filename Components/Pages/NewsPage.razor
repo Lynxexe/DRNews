@@ -15,43 +15,31 @@
 
 @if(selectedNewsItem == null && newsItems != null)
 {
-        @foreach (var item in newsItems)
-        {
-            <div class="news-container" @onclick="() => OpenNewsItem(item)">
-                @if (!string.IsNullOrEmpty(item.Image))
-                {
-                    <div class="image-container">
-                        <img src="@item.Image" alt="News Image" class="news-image" />
-                    </div>
-                }
-                else
-                {
-                    <div class="image-container">
-                        <img src="images/newsimage.jpg" alt="News Image" class="news-image" />
-                    </div>
-                }
-                <div class="content-container">
-                    <h4>@item.Title</h4>
+    @foreach (var item in newsItems)
+    {
+        <div class="news-container" @onclick="async () => await OpenNewsItem(item)">
 
-                    <p class="news-date">@item.Date</p>
+            @if (!string.IsNullOrEmpty(item.Image))
+            {
+                <div class="image-container">
+                    <img src="@item.Image" alt="News Image" class="news-image" />
                 </div>
+            }
+            else
+            {
+                <div class="image-container">
+                    <img src="images/newsimage.jpg" alt="News Image" class="news-image" />
+                </div>
+            }
+            <div class="content-container">
+                <h4>@item.Title</h4>
+                <p class="news-date">@item.Date</p>
             </div>
-        }
+        </div>
+    }
 }
 else if(selectedNewsItem != null)
 {
-    @if (!string.IsNullOrEmpty(selectedNewsItem.Image))
-    {
-        <div class="image-container">
-            <img src="@selectedNewsItem.Image" alt="News Image" class="news-image" />
-        </div>
-    }
-    else
-    {
-        <div class="image-container">
-            <img src="images/newsimage.jpg" alt="News Image" class="news-image" />
-        </div>
-    }
     <div class="news-item">
 
         <h2>@selectedNewsItem.Title</h2>
@@ -68,7 +56,6 @@ else if(selectedNewsItem != null)
     private NavigationManager NavigationManager { get; set; }
     private List<NewsItem> newsItems;
     private NewsItem selectedNewsItem;
-
     [Parameter]
     public string selectedCategory { get; set; } = "SenesteNyt";
 
@@ -115,7 +102,7 @@ else if(selectedNewsItem != null)
     }
     private void CloseNewsItem()
     {
-        
+
         selectedNewsItem = null;
         StateHasChanged();
     }

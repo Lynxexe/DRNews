@@ -81,16 +81,6 @@ button.btn-block {
     overflow: hidden; /* Ensure content doesn't overflow */
 }
 
-.image-container {
-    text-align: center; /* Center the image horizontally */
-    margin-bottom: 20px; /* Add spacing between image and content */
-}
-
-    .image-container img {
-        max-width: 100%; /* Ensure image doesn't exceed container width */
-        height: auto; /* Maintain aspect ratio */
-        border-radius: 5px; /* Add border radius to image */
-    }
 #lukKnap {
     display: block; /* Ensure button takes full width */
     margin: 20px auto; /* Center the button horizontally */
